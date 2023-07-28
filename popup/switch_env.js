@@ -55,6 +55,10 @@ function urlIsFromEnvironments(environments, currentUrl) {
   });
 }
 
+function environmentsForCurrentUrl(environments, currentUrl) {
+  return environments.find((subset) => urlIsFromEnvironments(subset, currentUrl)) || [];
+}
+
 Promise.all([
 
   // get current tab
@@ -66,13 +70,18 @@ Promise.all([
 ]).then(values => {
 
   const currentUrl = new URL(values[0][0].url);
-  const environments = values[1].environments;
+  const allEnvironments = values[1].environments;
+  const environments = environmentsForCurrentUrl(allEnvironments, currentUrl);
 
   if (urlIsFromEnvironments(environments, currentUrl)) {
     setOptions(environments);
   } else {
     let error = `<p>${currentUrl.origin} not configured:</p>`;
-    error += `<ul>${Object.values(environments).map((u) => `<li>${u}</li>`).join('')}</ul>`;
+    error += '<ul>'
+    allEnvironments.forEach((envs) => {
+      error += Object.values(envs).map((u) => `<li>${u}</li>`).join('');
+    });
+    error += '</ul>'
     onError(error);
   }
   listenForClicks(environments, currentUrl);

@@ -1,8 +1,15 @@
-const defaultOptions = {
-  'development': 'http://localhost:3001',
-  'staging': 'https://staging.host.com',
-  'production': 'https://production.host.com',
-};
+const defaultOptions = [
+  {
+    'development': 'http://localhost:3000',
+    'staging': 'https://staging.host.com',
+    'production': 'https://production.host.com',
+  },
+  {
+    'development': 'http://localhost:3001',
+    'staging': 'https://stag.otherhost.com',
+    'production': 'https://prod.otherhost.com',
+  }
+];
 
 function clearErrors() {
   document.querySelector('#errors').innerHTML = '';
