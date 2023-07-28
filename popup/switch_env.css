@@ -1,0 +1,44 @@
+html, body {
+}
+
+#popup-content {
+  width: 100px;
+}
+
+.hidden {
+  display: none;
+}
+
+#popup-content button {
+  border: none;
+  width: 100%;
+  margin: 3% auto;
+  padding: 4px;
+  text-align: center;
+  cursor: pointer;
+  background-color: #F0F1F2;
+}
+
+#popup-content button:hover {
+  background-color: #DEE0E2;
+}
+
+#error-content {
+  width: 300px;
+  font-size: 14px;
+  text-align: center;
+}
+#error-details {
+  text-align: left;
+}
+
+#bottom-bar {
+  border-top: 1px solid;
+  margin-top: 10px;
+  padding-top: 5px;
+  text-align: center;
+}
+
+#bottom-bar a {
+  font-size: 12px;
+}

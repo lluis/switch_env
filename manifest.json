@@ -1,0 +1,34 @@
+{
+  "manifest_version": 2,
+  "name": "SwitchEnv",
+  "version": "1.0",
+
+  "description": "Replaces host in current URL keeping path and parameters. Useful for changing environments during development.",
+  "homepage_url": "https://github.com/lluis/switch_env",
+
+  "icons": {
+    "48": "icons/icon.svg"
+  },
+
+  "options_ui": {
+    "page": "options/options.html",
+    "open_in_tab": true
+  },
+
+  "permissions": [
+    "activeTab",
+    "storage"
+  ],
+
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "SwitchEnv@lluis"
+    }
+  },
+
+  "browser_action": {
+    "default_icon": "icons/icon.svg",
+    "default_title": "SwitchEnv",
+    "default_popup": "popup/switch_env.html"
+  }
+}
