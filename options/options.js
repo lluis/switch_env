@@ -12,11 +12,15 @@ const defaultOptions = [
 ];
 
 function clearErrors() {
-  document.querySelector('#errors').innerHTML = '';
+  const errors = document.querySelector('#errors');
+  while (errors.firstChild) {
+    errors.removeChild(errors.firstChild);
+  }
 }
 
 function onError(error) {
-  document.querySelector('#errors').innerHTML = error;
+  const errors = document.querySelector('#errors');
+  errors.appendChild(document.createTextNode(error));
 }
 
 function getFormEnvironments() {

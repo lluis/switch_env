@@ -32,17 +32,23 @@ function listenForClicks(environments, currentUrl) {
 function onError(error) {
   document.querySelector("#popup-content").classList.add("hidden");
   document.querySelector("#error-content").classList.remove("hidden");
-  document.querySelector("#error-details")
-    .innerHTML = error;
+  const errors = document.querySelector("#error-details");
+  if (typeof error == 'string') {
+    errors.appendChild(document.createTextNode(error));
+  } else {
+    errors.appendChild(error);
+  }
 }
 
 function setOptions(environments) {
   document.querySelector("#popup-content").classList.remove("hidden");
   document.querySelector("#error-content").classList.add("hidden");
-  document.querySelector('#popup-content')
-    .innerHTML = Object.keys(environments)
-    .map((env) => `<button>${env}</button>`)
-    .join('');
+  const popup = document.querySelector('#popup-content');
+  Object.keys(environments).forEach((env) => {
+    const button = document.createElement('button');
+    button.appendChild(document.createTextNode(env));
+    popup.appendChild(button);
+  });
 }
 
 function urlIsFromEnvironments(environments, currentUrl) {
@@ -76,12 +82,19 @@ Promise.all([
   if (urlIsFromEnvironments(environments, currentUrl)) {
     setOptions(environments);
   } else {
-    let error = `<p>${currentUrl.origin} not configured:</p>`;
-    error += '<ul>'
+    const error = document.createElement('div');
+    const p = document.createElement('p');
+    p.appendChild(document.createTextNode(`${currentUrl.origin} not configured:`));
+    error.appendChild(p);
+    const list = document.createElement('ul');
     allEnvironments.forEach((envs) => {
-      error += Object.values(envs).map((u) => `<li>${u}</li>`).join('');
+      Object.values(envs).forEach((u) => {
+        const listItem = document.createElement('li');
+        listItem.appendChild(document.createTextNode(u));
+        list.appendChild(listItem);
+      });
     });
-    error += '</ul>'
+    error.appendChild(list);
     onError(error);
   }
   listenForClicks(environments, currentUrl);
