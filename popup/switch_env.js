@@ -84,7 +84,7 @@ Promise.all([
   } else {
     const error = document.createElement('div');
     const p = document.createElement('p');
-    p.appendChild(document.createTextNode(`${currentUrl.origin} not configured:`));
+    p.appendChild(document.createTextNode('SwitchEnv configured for:'));
     error.appendChild(p);
     const list = document.createElement('ul');
     allEnvironments.forEach((envs) => {
@@ -95,6 +95,11 @@ Promise.all([
       });
     });
     error.appendChild(list);
+    if (currentUrl.origin != 'null') {
+      const p2 = document.createElement('p');
+      p2.appendChild(document.createTextNode(`(current URL: ${currentUrl.origin})`));
+      error.appendChild(p2);
+    }
     onError(error);
   }
   listenForClicks(environments, currentUrl);
