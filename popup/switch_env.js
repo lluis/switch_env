@@ -17,7 +17,7 @@ function listenForClicks(environments, currentUrl) {
       // Ignore when click is not on a button within <div id="popup-content">.
       return;
     }
-    if (currentUrl.origin != environments[e.target.textContent]) {
+    if (currentUrl.origin !== environments[e.target.textContent]) {
       browser.tabs.update(null, {
         url: replaceHost(
           currentUrl,
@@ -33,7 +33,7 @@ function onError(error) {
   document.querySelector("#popup-content").classList.add("hidden");
   document.querySelector("#error-content").classList.remove("hidden");
   const errors = document.querySelector("#error-details");
-  if (typeof error == 'string') {
+  if (typeof error === 'string') {
     errors.appendChild(document.createTextNode(error));
   } else {
     errors.appendChild(error);
@@ -54,15 +54,15 @@ function setOptions(environments) {
 function urlIsFromEnvironments(environments, currentUrl) {
   return Object.values(environments).some((url) => {
     if (url.endsWith('/')) {
-      return currentUrl.origin == url.slice(0, -1);
+      return currentUrl.origin === url.slice(0, -1);
     } else {
-      return currentUrl.origin == url;
+      return currentUrl.origin === url;
     }
   });
 }
 
 function environmentsForCurrentUrl(environments, currentUrl) {
-  return environments.find((subset) => urlIsFromEnvironments(subset, currentUrl)) || [];
+  return environments?.find((subset) => urlIsFromEnvironments(subset, currentUrl)) || {};
 }
 
 Promise.all([
@@ -79,7 +79,9 @@ Promise.all([
   const allEnvironments = values[1].environments;
   const environments = environmentsForCurrentUrl(allEnvironments, currentUrl);
 
-  if (urlIsFromEnvironments(environments, currentUrl)) {
+  if (allEnvironments === null) {
+    onError('SwitchEnv is not configured');
+  } else if (urlIsFromEnvironments(environments, currentUrl)) {
     setOptions(environments);
   } else {
     const error = document.createElement('div');
@@ -87,7 +89,7 @@ Promise.all([
     p.appendChild(document.createTextNode('SwitchEnv configured for:'));
     error.appendChild(p);
     const list = document.createElement('ul');
-    allEnvironments.forEach((envs) => {
+    allEnvironments?.forEach((envs) => {
       Object.values(envs).forEach((u) => {
         const listItem = document.createElement('li');
         listItem.appendChild(document.createTextNode(u));
@@ -95,7 +97,7 @@ Promise.all([
       });
     });
     error.appendChild(list);
-    if (currentUrl.origin != 'null') {
+    if (currentUrl.origin !== 'null') {
       const p2 = document.createElement('p');
       p2.appendChild(document.createTextNode(`(current URL: ${currentUrl.origin})`));
       error.appendChild(p2);

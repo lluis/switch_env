@@ -24,14 +24,9 @@ function onError(error) {
 }
 
 function getFormEnvironments() {
-  clearErrors();
-  try {
-    return JSON.parse(
-      document.querySelector('#environments').value
-    );
-  } catch (e) {
-    onError(e);
-  }
+  return JSON.parse(
+    document.querySelector('#environments').value
+  );
 }
 
 function setFormEnvironments(environments) {
@@ -46,9 +41,14 @@ function setFormEnvironments(environments) {
 
 function saveOptions(e) {
   e.preventDefault();
-  browser.storage.sync.set({
-    environments: getFormEnvironments()
-  });
+  clearErrors();
+  try {
+    browser.storage.sync.set({
+      environments: getFormEnvironments()
+    });
+  } catch (e) {
+    onError(e);
+  }
 }
 
 function restoreOptions() {
