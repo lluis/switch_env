@@ -17,13 +17,13 @@ function listenForClicks(environments, currentUrl) {
       // Ignore when click is not on a button within <div id="popup-content">.
       return;
     }
+
+    const newHost = Array.isArray(environments[e.target.textContent])
+      ? environments[e.target.textContent][0]
+      : environments[e.target.textContent]
+
     if (currentUrl.origin !== environments[e.target.textContent]) {
-      browser.tabs.update(null, {
-        url: replaceHost(
-          currentUrl,
-          environments[e.target.textContent]
-        )
-      });
+      browser.tabs.update(null, { url: replaceHost(currentUrl, newHost) });
     }
     window.close();
   });
@@ -52,7 +52,7 @@ function setOptions(environments) {
 }
 
 function urlIsFromEnvironments(environments, currentUrl) {
-  return Object.values(environments).some((url) => {
+  return Object.values(environments).flat().some((url) => {
     if (url.endsWith('/')) {
       return currentUrl.origin === url.slice(0, -1);
     } else {

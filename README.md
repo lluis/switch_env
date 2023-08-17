@@ -40,3 +40,21 @@ You can add multiple applications to the Array:
   }
 ]
 ```
+
+And multiple URLs in environments:
+
+```
+[
+  {
+    'development': 'http://localhost:3000',
+    'staging': [
+      'https://staging.myapp.com',
+      'https://stag_alias.myapp.com'
+    ],
+    'production': [
+      'https://production.myapp.com',
+      'https://prod_alias.myapp.com'
+    ]
+  }
+]
+```
