@@ -6,26 +6,36 @@ function replaceHost(currentUrl, newHost) {
   return currentUrl.href;
 }
 
+function handleClick(e, environments, currentUrl) {
+  if (e.target.id === 'configuration') {
+    browser.runtime.openOptionsPage();
+    return;
+  }
+  if (e.target.tagName !== "BUTTON" || !e.target.closest("#popup-content")) {
+    // Ignore when click is not on a button within <div id="popup-content">.
+    return;
+  }
+
+  const targetHosts = Array.isArray(environments[e.target.textContent])
+    ? environments[e.target.textContent]
+    : [environments[e.target.textContent]];
+
+  if (!targetHosts.includes(currentUrl.origin)) {
+    if (e.button === 0) {
+      browser.tabs.update(null, { url: replaceHost(currentUrl, targetHosts[0]) });
+    } else if (e.button === 1) {
+      browser.tabs.create({ url: replaceHost(currentUrl, targetHosts[0]) });
+    }
+  }
+  window.close();
+}
+
 function listenForClicks(environments, currentUrl) {
   document.addEventListener("click", (e) => {
-
-    if (e.target.id === 'configuration') {
-      browser.runtime.openOptionsPage();
-      return;
-    }
-    if (e.target.tagName !== "BUTTON" || !e.target.closest("#popup-content")) {
-      // Ignore when click is not on a button within <div id="popup-content">.
-      return;
-    }
-
-    const newHost = Array.isArray(environments[e.target.textContent])
-      ? environments[e.target.textContent][0]
-      : environments[e.target.textContent]
-
-    if (currentUrl.origin !== environments[e.target.textContent]) {
-      browser.tabs.update(null, { url: replaceHost(currentUrl, newHost) });
-    }
-    window.close();
+    handleClick(e, environments, currentUrl);
+  });
+  document.addEventListener("auxclick", (e) => {
+    handleClick(e, environments, currentUrl);
   });
 }
 
@@ -40,12 +50,18 @@ function onError(error) {
   }
 }
 
-function setOptions(environments) {
+function setOptions(environments, currentUrl) {
   document.querySelector("#popup-content").classList.remove("hidden");
   document.querySelector("#error-content").classList.add("hidden");
   const popup = document.querySelector('#popup-content');
   Object.keys(environments).forEach((env) => {
+    const targetHosts = Array.isArray(environments[env])
+      ? environments[env]
+      : [environments[env]];
     const button = document.createElement('button');
+    if (targetHosts.includes(currentUrl.origin)) {
+      button.classList.add("active");
+    }
     button.appendChild(document.createTextNode(env));
     popup.appendChild(button);
   });
@@ -82,7 +98,7 @@ Promise.all([
   if (allEnvironments === null) {
     onError('SwitchEnv is not configured');
   } else if (urlIsFromEnvironments(environments, currentUrl)) {
-    setOptions(environments);
+    setOptions(environments, currentUrl);
   } else {
     const error = document.createElement('div');
     const p = document.createElement('p');

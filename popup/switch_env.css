@@ -17,10 +17,16 @@ html, body {
   text-align: center;
   cursor: pointer;
   background-color: #F0F1F2;
-}
-
-#popup-content button:hover {
-  background-color: #DEE0E2;
+  &.active {
+    background-color: #CCFFCC;
+    cursor: default;
+    &:hover {
+      background-color: #CCFFCC;
+    }
+  }
+  &:hover {
+    background-color: #DEE0E2;
+  }
 }
 
 #error-content {
