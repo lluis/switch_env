@@ -1,3 +1,8 @@
+if (typeof browser == "undefined") {
+  // Chrome does not support the browser namespace yet.
+  globalThis.browser = chrome;
+}
+
 const defaultOptions = [
   {
     'development': 'http://localhost:3000',

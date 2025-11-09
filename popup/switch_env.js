@@ -1,3 +1,8 @@
+if (typeof browser == "undefined") {
+  // Chrome does not support the browser namespace yet.
+  globalThis.browser = chrome;
+}
+
 function replaceHost(currentUrl, newHost) {
   const newURL = new URL(newHost);
   currentUrl.host = newURL.host;
