@@ -11,15 +11,15 @@ const defaultOptions = [
   }
 ];
 
-function clearErrors() {
-  const errors = document.querySelector('#errors');
+function clearMessages() {
+  const errors = document.querySelector('#messages');
   while (errors.firstChild) {
     errors.removeChild(errors.firstChild);
   }
 }
 
-function onError(error) {
-  const errors = document.querySelector('#errors');
+function showMessage(error) {
+  const errors = document.querySelector('#messages');
   errors.appendChild(document.createTextNode(error));
 }
 
@@ -30,24 +30,25 @@ function getFormEnvironments() {
 }
 
 function setFormEnvironments(environments) {
-  clearErrors();
+  clearMessages();
   try {
     document.querySelector('#environments')
       .value = JSON.stringify(environments, null, 2);
   } catch (e) {
-    onError(e);
+    showMessage(e);
   }
 }
 
 function saveOptions(e) {
   e.preventDefault();
-  clearErrors();
+  clearMessages();
   try {
     browser.storage.sync.set({
       environments: getFormEnvironments()
     });
+    showMessage('Saved successfully');
   } catch (e) {
-    onError(e);
+    showMessage(e);
   }
 }
 
@@ -58,7 +59,7 @@ function restoreOptions() {
   }
 
   let getting = browser.storage.sync.get('environments');
-  getting.then(setCurrentChoice, onError);
+  getting.then(setCurrentChoice, showMessage);
 }
 
 function resetToDefault(e) {

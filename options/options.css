@@ -1,0 +1,9 @@
+body {
+  padding: 20px;
+  textarea {
+    margin-bottom: 20px;
+  }
+  #messages {
+    margin-top: 20px;
+  }
+}
