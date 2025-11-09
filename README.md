@@ -6,6 +6,14 @@ Useful for changing environments during development.
 
 ![screenshot](screenshots/switch_env.png)
 
+# Installation
+
+Extension is available in Mozilla Add-ons Store:
+
+https://addons.mozilla.org/en-US/firefox/addon/switchenv/
+
+For Chromium / Chrome clone this repo and install from chrome://extensions/
+
 # Configuration
 
 switch_env configuration is a `json` Array:
